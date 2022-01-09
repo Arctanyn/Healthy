@@ -2,7 +2,7 @@
 //  User.swift
 //  Healthy
 //
-//  Created by Малиль Дугулюбгов on 03.01.2022.
+//  Created by Малиль Дугулюбгов on 09.01.2022.
 //
 
 enum Gender: String {
@@ -23,23 +23,3 @@ struct User {
     var minWeight: Int { 5 }
     var maxWeight: Int { 420 }
 }
-
-//extension UserHealth {
-//    mutating func setGender(gender: Gender) {
-//        self.gender = gender
-//    }
-//
-//    mutating func changeHeightTo(_ height: Int) {
-//        self.height = height
-//    }
-//
-//    mutating func changeWeightTo(_ weight: Int) {
-//        self.weight = weight
-//    }
-//
-//    mutating func changeAgeTo(_ age: Int) {
-//        self.age = age
-//    }
-//
-//}
-
