@@ -8,6 +8,7 @@
 import UIKit
 
 extension UIButton {
+    //MARK: Button selected effect
     func addSelectedEffect() {
         self.layer.shadowOpacity = 1
         self.layer.shadowColor = UIColor.systemIndigo.cgColor
@@ -15,6 +16,7 @@ extension UIButton {
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
     }
     
+    //MARK: Button animation effect
     func dentAnimation() {
         let dent = CASpringAnimation(keyPath: "transform.scale")
         dent.fromValue = 1
