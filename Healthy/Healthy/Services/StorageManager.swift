@@ -8,7 +8,7 @@
 import Foundation
 
 class StorageManager {
-    static var shared = StorageManager()
+    static let shared = StorageManager()
     
     private let storageKey = "UserHealthParameters"
     private let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
