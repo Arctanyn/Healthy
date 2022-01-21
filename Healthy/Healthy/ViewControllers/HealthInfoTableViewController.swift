@@ -12,6 +12,8 @@ class HealthInfoTableViewController: UITableViewController {
     //MARK: -Properties
     private var healthParameters: [HealthParametersType : Double] = [:]
     
+    
+    //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Результаты"
@@ -36,6 +38,7 @@ extension HealthInfoTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "healthInfoCell", for: indexPath) as! HealthInfoCell
+        
         switch indexPath.section {
         case 0:
             if let bodyMassIndexValue = healthParameters[.bodyMassIndex] {
@@ -52,6 +55,7 @@ extension HealthInfoTableViewController {
         default:
             break
         }
+        
         return cell
     }
 }
@@ -69,9 +73,13 @@ extension HealthInfoTableViewController {
         case 1:
             return "Рекомендуемое количество калорий"
         case 2:
-            return "Рекомендуемое оличество жидкости"
+            return "Рекомендуемое количество жидкости"
         default:
             return nil
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 25
     }
 }

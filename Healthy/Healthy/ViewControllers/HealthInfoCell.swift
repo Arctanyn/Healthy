@@ -10,10 +10,12 @@ import Foundation
 
 class HealthInfoCell: UITableViewCell {
 
+    //MARK: - View
     @IBOutlet weak var healthParamImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptiobLabel: UILabel!
     
+    //MARK: -Methods
     func updateContent(with healthType: HealthParametersType, and healthParamValue: Double) {
         switch healthType {
         case .bodyMassIndex:

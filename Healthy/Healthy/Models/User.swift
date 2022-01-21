@@ -5,12 +5,12 @@
 //  Created by Малиль Дугулюбгов on 09.01.2022.
 //
 
-enum Gender: String {
+enum Gender: String, Codable {
     case male = "Man"
     case female = "Woman"
 }
 
-struct User {
+struct User: Codable {
     var gender: Gender = .male
     var height = 196
     var weight = 89

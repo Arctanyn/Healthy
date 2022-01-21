@@ -11,7 +11,7 @@ import TinyConstraints
 class MainViewController: UIViewController {
 
     //MARK: -Properties
-    private var user = User()
+    private var user: User!
     private lazy var genderType = user.genderType {
         didSet {
             user.genderType = genderType
@@ -23,13 +23,13 @@ class MainViewController: UIViewController {
     private let valueChangingViewColor = UIColor(red: 84 / 255, green: 87 / 255, blue: 157 / 255, alpha: 1)
     
     private var scrollView = UIScrollView()
-    private lazy var containerView = UIView()
+    private var containerView = UIView()
     
     private lazy var maleGenderButton = UIButton(type: .system)
     private lazy var femaleGenderButton = UIButton(type: .system)
     private lazy var genderStackView = UIStackView()
     
-    private lazy var heightView = UIView()
+    private var heightView = UIView()
     
     private lazy var heightSlider: UISlider = {
         let slider = UISlider()
@@ -40,16 +40,16 @@ class MainViewController: UIViewController {
         return slider
     }()
     
-    private lazy var heightLabel = setupTitleForViews(title: "Рост")
+    private lazy var heightLabel = setupHeaderForViews(title: "Рост")
     private lazy var heightValueLabel = setupValueLabel()
     
-    private lazy var weightLabel = setupTitleForViews(title: "Вес")
+    private lazy var weightLabel = setupHeaderForViews(title: "Вес")
     private lazy var weightValueLabel = setupValueLabel()
     
-    private lazy var ageLabel = setupTitleForViews(title: "Возраст")
+    private lazy var ageLabel = setupHeaderForViews(title: "Возраст")
     private lazy var ageValueLabel = setupValueLabel()
     
-    private lazy var imposedParametersStackView = UIStackView()
+    private var imposedParametersStackView = UIStackView()
     
     private lazy var goToResultsButton: UIButton = {
         let button = UIButton(type: .system)
@@ -61,16 +61,29 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    private lazy var weightOneStepper = setupStepper(Double(user.minWeight), Double(user.maxWeight), 1)
-    private lazy var ageOneStepper = setupStepper(Double(user.minAge), Double(user.maxAge), 1)
+    private lazy var weightOneStepper = setupStepper(
+        minValue: Double(user.minWeight),
+        maxValue: Double(user.maxWeight),
+        step: 1
+    )
     
-    private lazy var weightTenStepper = setupStepper(self.weightOneStepper.minimumValue,
-                                                     self.weightOneStepper.maximumValue,
-                                                     10)
+    private lazy var ageOneStepper = setupStepper(
+        minValue: Double(user.minAge),
+        maxValue: Double(user.maxAge),
+        step: 1
+    )
     
-    private lazy var ageTenStepper = setupStepper(self.ageOneStepper.minimumValue,
-                                                  self.ageOneStepper.maximumValue,
-                                                  10)
+    private lazy var weightTenStepper = setupStepper(
+        minValue: Double(user.minWeight),
+        maxValue: Double(user.maxWeight),
+        step: 10
+    )
+    
+    private lazy var ageTenStepper = setupStepper(
+        minValue: Double(user.minAge),
+        maxValue: Double(user.maxAge),
+        step: 10
+    )
     
     //MARK: -View Controller Lifecycle
     override func viewDidLoad() {
@@ -80,6 +93,8 @@ class MainViewController: UIViewController {
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Healthy"
+        
+        loadUserData()
         
         setScrollViewConstraints()
         configureContainerView()
@@ -98,7 +113,7 @@ extension MainViewController {
         maleGenderButton.dentAnimation()
         maleGenderButton.addSelectedEffect()
         femaleGenderButton.layer.shadowOpacity = 0
-        print("Male button tapped")
+        print("Male button did tapped")
     }
     
     @objc func selectFemaleGender(_ sender: UIButton) {
@@ -106,7 +121,7 @@ extension MainViewController {
         femaleGenderButton.dentAnimation()
         femaleGenderButton.addSelectedEffect()
         maleGenderButton.layer.shadowOpacity = 0
-        print("Female button tapped")
+        print("Female button did tapped")
     }
     
     @objc func changeHeightSliderValue(_ sender: UISlider) {
@@ -142,6 +157,7 @@ extension MainViewController {
     
     @objc func goToResults(_ sender: UIButton) {
         guard sender == goToResultsButton else { return }
+        StorageManager.shared.save(with: user)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let healthInfoTableVC = storyboard.instantiateViewController(withIdentifier: "healthResults") as? HealthInfoTableViewController else { return }
         healthInfoTableVC.loadParameters(of: user)
@@ -151,6 +167,10 @@ extension MainViewController {
 
 //MARK: Private methods
 extension MainViewController {
+    
+    private func loadUserData() {
+        self.user = StorageManager.shared.fetchUserParameters()
+    }
     
     fileprivate func addViewTargets() {
         heightSlider.addTarget(self, action: #selector(changeHeightSliderValue(_:)), for: .valueChanged)
@@ -199,7 +219,7 @@ extension MainViewController {
     }
     
     //MARK: Informing Labels
-    private func setupTitleForViews(title: String) -> UILabel {
+    private func setupHeaderForViews(title: String) -> UILabel {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .white
@@ -310,6 +330,7 @@ extension MainViewController {
         }
     }
     
+    //MARK: Imposed parameters view
     private func setupImposedParamView(_ titleLabel: UILabel, _ valueLabel: UILabel, _ steppers: [UIStepper]) -> UIView {
         let userParamView = UIView()
         userParamView.layer.cornerRadius = 12
@@ -347,7 +368,7 @@ extension MainViewController {
     }
     
     //MARK: Stepper
-    private func setupStepper(_ minValue: Double, _ maxValue: Double, _ step: Double) -> UIStepper {
+    private func setupStepper(minValue: Double, maxValue: Double, step: Double) -> UIStepper {
         let stepper = UIStepper()
         stepper.minimumValue = minValue
         stepper.maximumValue = maxValue

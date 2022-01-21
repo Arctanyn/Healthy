@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B11E8DF279A8B42009E3E4D /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B11E8DE279A8B42009E3E4D /* StorageManager.swift */; };
 		3B48CEEB278B082B008569B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B48CEEA278B082B008569B4 /* AppDelegate.swift */; };
 		3B48CEED278B082B008569B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B48CEEC278B082B008569B4 /* SceneDelegate.swift */; };
 		3B48CEEF278B082B008569B4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B48CEEE278B082B008569B4 /* MainViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B11E8DE279A8B42009E3E4D /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		3B48CEE7278B082B008569B4 /* Healthy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Healthy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B48CEEA278B082B008569B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B48CEEC278B082B008569B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +54,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B11E8DD279A8B22009E3E4D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3B11E8DE279A8B42009E3E4D /* StorageManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		3B11E8E0279A956D009E3E4D /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				3B48CEF3278B082C008569B4 /* Assets.xcassets */,
+				3B48CEF8278B082C008569B4 /* Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
 		3B48CEDE278B082B008569B4 = {
 			isa = PBXGroup;
 			children = (
@@ -76,10 +95,10 @@
 				3B48CF00278B084C008569B4 /* AppFiles */,
 				3B48CEFF278B0841008569B4 /* ViewControllers */,
 				3B48CF01278B09A2008569B4 /* Models */,
+				3B11E8DD279A8B22009E3E4D /* Services */,
 				3B48CF08278B0A05008569B4 /* Extension + UI */,
 				3B48CEFE278B0835008569B4 /* Storyboards */,
-				3B48CEF3278B082C008569B4 /* Assets.xcassets */,
-				3B48CEF8278B082C008569B4 /* Info.plist */,
+				3B11E8E0279A956D009E3E4D /* SupportingFiles */,
 			);
 			path = Healthy;
 			sourceTree = "<group>";
@@ -264,6 +283,7 @@
 				3B48CF03278B09C6008569B4 /* User.swift in Sources */,
 				3B48CF10278B210C008569B4 /* HealthInfoCell.swift in Sources */,
 				3B48CF0A278B0A24008569B4 /* HealthInfo.swift in Sources */,
+				3B11E8DF279A8B42009E3E4D /* StorageManager.swift in Sources */,
 				3B48CF07278B09FE008569B4 /* Extension + UIButton.swift in Sources */,
 				3B48CEEF278B082B008569B4 /* MainViewController.swift in Sources */,
 				3B48CEEB278B082B008569B4 /* AppDelegate.swift in Sources */,
@@ -420,7 +440,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XX34NBC2NS;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Healthy/Info.plist;
+				INFOPLIST_FILE = Healthy/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -450,7 +470,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XX34NBC2NS;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Healthy/Info.plist;
+				INFOPLIST_FILE = Healthy/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
