@@ -29,7 +29,7 @@ class HealthInfoCell: UITableViewCell {
         case .liquid:
             titleLabel.text = "\(truncate(healthParamValue, 10)) л"
             healthParamImageView.image = UIImage(named: "water-bottle.icon")
-            descriptiobLabel.text = "Около \(Int(round(healthParamValue * 1000 / 250))) кружек"
+            descriptiobLabel.text = "Рекомендуемая суточная норма жидкости\n(Около \(Int(round(healthParamValue * 1000 / 250))) кружек)"
         }
     }
     

@@ -49,7 +49,7 @@ class MainViewController: UIViewController {
     private lazy var ageLabel = setupHeaderForViews(title: "Возраст")
     private lazy var ageValueLabel = setupValueLabel()
     
-    private var imposedParametersStackView = UIStackView()
+    private lazy var steppingChangeableStackView = UIStackView()
     
     private lazy var goToResultsButton: UIButton = {
         let button = UIButton(type: .system)
@@ -61,28 +61,16 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    private lazy var weightOneStepper = setupStepper(
+    private lazy var weightStepper = setupStepper(
         minValue: Double(user.minWeight),
         maxValue: Double(user.maxWeight),
         step: 1
     )
     
-    private lazy var ageOneStepper = setupStepper(
+    private lazy var ageStepper = setupStepper(
         minValue: Double(user.minAge),
         maxValue: Double(user.maxAge),
         step: 1
-    )
-    
-    private lazy var weightTenStepper = setupStepper(
-        minValue: Double(user.minWeight),
-        maxValue: Double(user.maxWeight),
-        step: 10
-    )
-    
-    private lazy var ageTenStepper = setupStepper(
-        minValue: Double(user.minAge),
-        maxValue: Double(user.maxAge),
-        step: 10
     )
     
     //MARK: -View Controller Lifecycle
@@ -100,6 +88,7 @@ class MainViewController: UIViewController {
         configureContainerView()
         
         scrollView.contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height)
+        scrollView.showsHorizontalScrollIndicator = false
 
         addViewTargets()
         updateUI(user.height, user.weight, user.age)
@@ -132,25 +121,15 @@ extension MainViewController {
     }
     
     @objc func changeWeightValue(_ sender: UIStepper) {
-        guard sender == weightOneStepper || sender == weightTenStepper else { return }
-        if sender == weightOneStepper {
-            weightTenStepper.value = weightOneStepper.value
-        } else if sender == weightTenStepper {
-            weightOneStepper.value = weightTenStepper.value
-        }
-        let currentWeight = sender.value
+        guard sender == weightStepper else { return }
+        let currentWeight = weightStepper.value
         user.weight = Int(currentWeight)
         weightValueLabel.text = "\(Int(sender.value))"
     }
     
     @objc func changeAgeValue(_ sender: UIStepper) {
-        guard sender == ageOneStepper || sender == ageTenStepper else { return }
-        if sender == ageOneStepper {
-            ageTenStepper.value = ageOneStepper.value
-        } else if sender == ageTenStepper {
-            ageOneStepper.value = ageTenStepper.value
-        }
-        let currenAge = sender.value
+        guard sender == ageStepper else { return }
+        let currenAge = ageStepper.value
         user.age = Int(currenAge)
         ageValueLabel.text = "\(Int(sender.value))"
     }
@@ -175,12 +154,9 @@ extension MainViewController {
     fileprivate func addViewTargets() {
         heightSlider.addTarget(self, action: #selector(changeHeightSliderValue(_:)), for: .valueChanged)
         
-        weightOneStepper.addTarget(self, action: #selector(changeWeightValue(_:)), for: .valueChanged)
-        ageOneStepper.addTarget(self, action: #selector(changeAgeValue(_:)), for: .valueChanged)
-        
-        weightTenStepper.addTarget(self, action: #selector(changeWeightValue(_:)), for: .valueChanged)
-        ageTenStepper.addTarget(self, action: #selector(changeAgeValue(_:)), for: .valueChanged)
-        
+        weightStepper.addTarget(self, action: #selector(changeWeightValue(_:)), for: .valueChanged)
+        ageStepper.addTarget(self, action: #selector(changeAgeValue(_:)), for: .valueChanged)
+
         goToResultsButton.addTarget(self, action: #selector(goToResults(_:)), for: .touchUpInside)
     }
     
@@ -190,12 +166,10 @@ extension MainViewController {
         heightSlider.value = Float(height)
         
         weightValueLabel.text = "\(weight)"
-        weightOneStepper.value = Double(weight)
-        weightTenStepper.value = Double(weight)
+        weightStepper.value = Double(weight)
         
         ageValueLabel.text = "\(age)"
-        ageOneStepper.value = Double(age)
-        ageTenStepper.value = Double(age)
+        ageStepper.value = Double(age)
         
         switch genderType {
         case .male:
@@ -212,7 +186,7 @@ extension MainViewController {
         scrollView.addSubview(containerView)
         configureGenderStackView()
         configureHeightView()
-        configureImposedStackView()
+        configureSteppingChangeableStackView()
         configureGoToResultsButton()
         
         setContainerViewConstraints()
@@ -221,7 +195,7 @@ extension MainViewController {
     //MARK: Informing Labels
     private func setupHeaderForViews(title: String) -> UILabel {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .white
         label.text = title
         label.textAlignment = .center
@@ -247,12 +221,13 @@ extension MainViewController {
         genderStackView.spacing = 10
         
         //Add subviews
-        addViewToGenderStackView()
+        addViewsToGenderStackView()
         
+        //Set constraints
         setGenderStackViewConstraints()
     }
     
-    private func addViewToGenderStackView() {
+    private func addViewsToGenderStackView() {
         for (index, button) in [maleGenderButton, femaleGenderButton].enumerated() {
             button.configuration = .tinted()
             button.configuration?.baseBackgroundColor = .systemIndigo
@@ -267,7 +242,7 @@ extension MainViewController {
                 button.configuration?.title = "Женский"
                 button.addTarget(self, action: #selector(selectFemaleGender(_:)), for: .touchUpInside)
             }
-            button.height(150)
+            button.height(160)
             genderStackView.addArrangedSubview(button)
         }
     }
@@ -295,74 +270,71 @@ extension MainViewController {
     }
     
     //MARK: Imposed Stack View
-    private func configureImposedStackView() {
-        containerView.addSubview(imposedParametersStackView)
+    private func configureSteppingChangeableStackView() {
+        containerView.addSubview(steppingChangeableStackView)
         
         //Set stackView parameters
-        imposedParametersStackView.axis = .horizontal
-        imposedParametersStackView.distribution = .fillEqually
-        imposedParametersStackView.spacing = 10
+        steppingChangeableStackView.axis = .horizontal
+        steppingChangeableStackView.distribution = .fillEqually
+        steppingChangeableStackView.spacing = 10
         
         //Add subviews
-        addSubviewsForImposedStackView()
+        addSubviewsSteppingChangeableStackView()
         
         //Constraints
-        setUserParamStackViewConstraints()
+        setSteppingChangeableStackViewConstraints()
     }
 
-    private func addSubviewsForImposedStackView() {
+    private func addSubviewsSteppingChangeableStackView() {
         let countOfView = 2
         var userParamView: UIView!
         for i in 1...countOfView {
             switch i {
             case 1:
-                userParamView = setupImposedParamView(weightLabel,
-                                                      weightValueLabel,
-                                                      [weightOneStepper, weightTenStepper])
+                userParamView = setupSteppingChangeableView(
+                    header: weightLabel,
+                    valueLabel: weightValueLabel,
+                    stepper: weightStepper
+                )
             case 2:
-                userParamView = setupImposedParamView(ageLabel,
-                                                      ageValueLabel,
-                                                      [ageOneStepper, ageTenStepper])
+                userParamView = setupSteppingChangeableView(
+                    header: ageLabel,
+                    valueLabel: ageValueLabel,
+                    stepper: ageStepper
+                )
             default:
                 break
             }
-            imposedParametersStackView.addArrangedSubview(userParamView)
+            steppingChangeableStackView.addArrangedSubview(userParamView)
         }
     }
     
-    //MARK: Imposed parameters view
-    private func setupImposedParamView(_ titleLabel: UILabel, _ valueLabel: UILabel, _ steppers: [UIStepper]) -> UIView {
+    //MARK: Stepping changeable parameters view
+    private func setupSteppingChangeableView(header: UILabel, valueLabel: UILabel, stepper: UIStepper) -> UIView {
         let userParamView = UIView()
         userParamView.layer.cornerRadius = 12
         userParamView.backgroundColor = mainColor
-        userParamView.height(150)
-        
-        //Setup steppers stack view
-        let steppersStackView = UIStackView(arrangedSubviews: steppers)
-        steppersStackView.axis = .vertical
-        steppersStackView.distribution = .fillEqually
-        steppersStackView.spacing = 5
-        
+        userParamView.height(160)
         
         //Add subviews
-        userParamView.addSubview(titleLabel)
+        userParamView.addSubview(header)
         userParamView.addSubview(valueLabel)
-        userParamView.addSubview(steppersStackView)
+        userParamView.addSubview(stepper)
         
         //Subviews constraints
-        titleLabel.topToSuperview(offset: 10)
-        titleLabel.leadingToSuperview(offset: 10)
-        titleLabel.trailingToSuperview(offset: 10)
-        titleLabel.height(25)
-        titleLabel.centerXToSuperview()
+        header.topToSuperview(offset: 10)
+        header.leadingToSuperview(offset: 10)
+        header.trailingToSuperview(offset: 10)
+        header.height(25)
+        header.centerXToSuperview()
         
-        valueLabel.topToBottom(of: titleLabel)
+        valueLabel.topToBottom(of: header, offset: 10)
         valueLabel.leadingToSuperview(offset: 10)
         valueLabel.trailingToSuperview(offset: 10)
         
-        steppersStackView.topToBottom(of: valueLabel)
-        steppersStackView.centerXToSuperview()
-        steppersStackView.bottomToSuperview(offset: -10)
+        stepper.topToBottom(of: valueLabel, offset: 10)
+        stepper.centerXToSuperview()
+        stepper.bottomToSuperview(offset: -20)
         
         return userParamView
     }
@@ -399,12 +371,12 @@ extension MainViewController {
     
     private func setGenderStackViewConstraints() {
         genderStackView.edgesToSuperview(excluding: .bottom,
-                                         insets: TinyEdgeInsets(top: 10, left: 16, bottom: 0, right: 16),
+                                         insets: TinyEdgeInsets(top: 30, left: 16, bottom: 0, right: 16),
                                          usingSafeArea: true)
     }
     
     private func setHeightViewConstraints() {
-        heightView.height(130)
+        heightView.height(160)
         heightView.topToBottom(of: genderStackView, offset: 15)
         heightView.trailingToSuperview(offset: 16, usingSafeArea: true)
         heightView.leadingToSuperview(offset: 16, usingSafeArea: true)
@@ -427,20 +399,20 @@ extension MainViewController {
         heightSlider.topToBottom(of: heightValueLabel, offset: 10)
         heightSlider.leadingToSuperview(offset: 16)
         heightSlider.trailingToSuperview(offset: 16)
-        heightSlider.bottomToSuperview(offset: -10, relation: .equalOrGreater)
+        heightSlider.bottomToSuperview(offset: -20, relation: .equalOrGreater)
     }
     
-    private func setUserParamStackViewConstraints() {
-        imposedParametersStackView.topToBottom(of: heightView, offset: 15)
-        imposedParametersStackView.leadingToSuperview(offset: 20, usingSafeArea: true)
-        imposedParametersStackView.trailingToSuperview(offset: 20, usingSafeArea: true)
+    private func setSteppingChangeableStackViewConstraints() {
+        steppingChangeableStackView.topToBottom(of: heightView, offset: 15)
+        steppingChangeableStackView.leadingToSuperview(offset: 20, usingSafeArea: true)
+        steppingChangeableStackView.trailingToSuperview(offset: 20, usingSafeArea: true)
     }
     
     private func setGoToResultsButtonConstraints() {
         goToResultsButton.centerXToSuperview()
         goToResultsButton.width(150)
         goToResultsButton.height(45)
-        goToResultsButton.topToBottom(of: imposedParametersStackView, offset: 40, relation: .equalOrGreater)
+        goToResultsButton.topToBottom(of: steppingChangeableStackView, offset: 40, relation: .equalOrGreater)
         goToResultsButton.bottomToSuperview(offset: -20)
     }
 }
