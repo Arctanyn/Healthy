@@ -75,13 +75,13 @@ extension HealthInfo {
 func discoverBMIType(_ bmi: Double) -> BMIClassification {
     if bmi < 18.5 {
         return .deficit
-    } else if (18.5...24.9).contains(bmi) {
+    } else if (18.5..<25.0).contains(bmi) {
         return .normal
-    } else if (25.0...29.9).contains(bmi) {
+    } else if (25.0..<30.0).contains(bmi) {
         return .excess
-    } else if (30.0...34.9).contains(bmi) {
+    } else if (30.0..<35.0).contains(bmi) {
         return .obesityFirstDegree
-    } else if (35.0...39.9).contains(bmi) {
+    } else if (35.0..<40.0).contains(bmi) {
         return .obesitySecondDegree
     } else {
         return .obesityThirdDegree
