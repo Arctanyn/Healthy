@@ -11,7 +11,11 @@ class HealthInfoTableViewController: UITableViewController {
 
     //MARK: -Properties
     private var healthParameters: [HealthParametersType : Double] = [:]
-    
+    private var healthParametersType: [HealthParametersType] = [
+        .bodyMassIndex,
+        .calories,
+        .liquid
+    ]
     
     //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
@@ -29,7 +33,7 @@ class HealthInfoTableViewController: UITableViewController {
 // MARK: - Table view data source
 extension HealthInfoTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return healthParameters.count
+        return healthParametersType.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,21 +43,21 @@ extension HealthInfoTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "healthInfoCell", for: indexPath) as! HealthInfoCell
         
-        switch indexPath.section {
-        case 0:
-            if let bodyMassIndexValue = healthParameters[.bodyMassIndex] {
-                cell.updateContent(with: .bodyMassIndex, and: bodyMassIndexValue)
+        let currentHealthType = healthParametersType[indexPath.section]
+        
+        switch currentHealthType {
+        case .bodyMassIndex:
+            if let bodyMassIndexValue = healthParameters[currentHealthType] {
+                cell.updateContent(with: currentHealthType, and: bodyMassIndexValue)
             }
-        case 1:
-            if let caloriesValue = healthParameters[.calories] {
-                cell.updateContent(with: .calories, and: caloriesValue)
+        case .calories:
+            if let caloriesValue = healthParameters[currentHealthType] {
+                cell.updateContent(with: currentHealthType, and: caloriesValue)
             }
-        case 2:
-            if let liquidAmount = healthParameters[.liquid] {
-                cell.updateContent(with: .liquid, and: liquidAmount)
+        case .liquid:
+            if let liquidAmount = healthParameters[currentHealthType] {
+                cell.updateContent(with: currentHealthType, and: liquidAmount)
             }
-        default:
-            break
         }
         
         return cell
@@ -67,15 +71,16 @@ extension HealthInfoTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
+        
+        let currentType = self.healthParametersType[section]
+        
+        switch currentType {
+        case .bodyMassIndex:
             return "Индекс Массы Тела (ИМТ)"
-        case 1:
+        case .calories:
             return "Рекомендуемое количество калорий"
-        case 2:
+        case .liquid:
             return "Рекомендуемое количество жидкости"
-        default:
-            return nil
         }
     }
     

@@ -19,8 +19,18 @@ class MainViewController: UIViewController {
     }
     
     //MARK: -View
-    private let mainColor = UIColor(red: 16 / 255, green: 12 / 255, blue: 34 / 255, alpha: 1)
-    private let valueChangingViewColor = UIColor(red: 84 / 255, green: 87 / 255, blue: 157 / 255, alpha: 1)
+    private let mainColor = UIColor(
+        red: 16 / 255,
+        green: 12 / 255,
+        blue: 44 / 255,
+        alpha: 1
+    )
+    private let valueChangingViewColor = UIColor(
+        red: 84 / 255,
+        green: 87 / 255,
+        blue: 157 / 255,
+        alpha: 1
+    )
     
     private var scrollView = UIScrollView()
     private var containerView = UIView()
@@ -89,6 +99,7 @@ class MainViewController: UIViewController {
         
         scrollView.contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height)
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
 
         addViewTargets()
         updateUI(user.height, user.weight, user.age)
@@ -97,7 +108,7 @@ class MainViewController: UIViewController {
 
 //MARK: -Actions
 extension MainViewController {
-    @objc func selectMaleGender(_ sender: UIButton) {
+    @objc private func selectMaleGender(_ sender: UIButton) {
         genderType = .male
         maleGenderButton.dentAnimation()
         maleGenderButton.addSelectedEffect()
@@ -105,7 +116,7 @@ extension MainViewController {
         print("Male button did tapped")
     }
     
-    @objc func selectFemaleGender(_ sender: UIButton) {
+    @objc private func selectFemaleGender(_ sender: UIButton) {
         genderType = .female
         femaleGenderButton.dentAnimation()
         femaleGenderButton.addSelectedEffect()
@@ -113,28 +124,28 @@ extension MainViewController {
         print("Female button did tapped")
     }
     
-    @objc func changeHeightSliderValue(_ sender: UISlider) {
+    @objc private func changeHeightSliderValue(_ sender: UISlider) {
         guard sender == heightSlider else { return }
         let currentValue = Int(heightSlider.value)
         user.height = Int(currentValue)
         heightValueLabel.text = "\(currentValue)"
     }
     
-    @objc func changeWeightValue(_ sender: UIStepper) {
+    @objc private func changeWeightValue(_ sender: UIStepper) {
         guard sender == weightStepper else { return }
         let currentWeight = weightStepper.value
         user.weight = Int(currentWeight)
         weightValueLabel.text = "\(Int(sender.value))"
     }
     
-    @objc func changeAgeValue(_ sender: UIStepper) {
+    @objc private func changeAgeValue(_ sender: UIStepper) {
         guard sender == ageStepper else { return }
         let currenAge = ageStepper.value
         user.age = Int(currenAge)
         ageValueLabel.text = "\(Int(sender.value))"
     }
     
-    @objc func goToResults(_ sender: UIButton) {
+    @objc private func goToResults(_ sender: UIButton) {
         guard sender == goToResultsButton else { return }
         StorageManager.shared.save(with: user)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -184,11 +195,14 @@ extension MainViewController {
 extension MainViewController {
     private func configureContainerView() {
         scrollView.addSubview(containerView)
+        
+        //Configure subviews
         configureGenderStackView()
         configureHeightView()
         configureSteppingChangeableStackView()
         configureGoToResultsButton()
         
+        //Set constraints
         setContainerViewConstraints()
     }
     
@@ -237,7 +251,7 @@ extension MainViewController {
                 button.configuration?.image = UIImage(named: "male.gender.icon")
                 button.configuration?.title = "Мужской"
                 button.addTarget(self, action: #selector(selectMaleGender(_:)), for: .touchUpInside)
-            } else if index == 1 {
+            } else {
                 button.configuration?.image = UIImage(named: "female.gender.icon")
                 button.configuration?.title = "Женский"
                 button.addTarget(self, action: #selector(selectFemaleGender(_:)), for: .touchUpInside)
@@ -370,9 +384,11 @@ extension MainViewController {
     }
     
     private func setGenderStackViewConstraints() {
-        genderStackView.edgesToSuperview(excluding: .bottom,
-                                         insets: TinyEdgeInsets(top: 30, left: 16, bottom: 0, right: 16),
-                                         usingSafeArea: true)
+        genderStackView.edgesToSuperview(
+            excluding: .bottom,
+            insets: TinyEdgeInsets(top: 30, left: 16, bottom: 0, right: 16),
+            usingSafeArea: true
+        )
     }
     
     private func setHeightViewConstraints() {
@@ -412,7 +428,11 @@ extension MainViewController {
         goToResultsButton.centerXToSuperview()
         goToResultsButton.width(150)
         goToResultsButton.height(45)
-        goToResultsButton.topToBottom(of: steppingChangeableStackView, offset: 40, relation: .equalOrGreater)
+        goToResultsButton.topToBottom(
+            of: steppingChangeableStackView,
+            offset: 40,
+            relation: .equalOrGreater
+        )
         goToResultsButton.bottomToSuperview(offset: -20)
     }
 }

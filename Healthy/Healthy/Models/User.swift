@@ -12,9 +12,9 @@ enum Gender: String, Codable {
 
 struct User: Codable {
     var gender: Gender = .male
-    var height = 196
-    var weight = 89
-    var age = 18
+    var height = 180
+    var weight = 78
+    var age = 29
     var genderType: Gender = .male
     
     var minAge: Int { 5 }

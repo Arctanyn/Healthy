@@ -68,7 +68,7 @@
                                             </subviews>
                                         </stackView>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.076544748060000001" green="0.06214124453" blue="0.1708885832" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="backgroundColor" red="0.062240208583433369" green="0.047058823529411764" blue="0.17254901960784313" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <constraints>
                                         <constraint firstItem="UzW-X8-kl3" firstAttribute="top" secondItem="bAN-l9-aez" secondAttribute="topMargin" id="6zl-Pe-Eke"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="UzW-X8-kl3" secondAttribute="bottom" id="C7A-3B-dM9"/>
@@ -103,7 +103,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="owS-0z-1hf" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" largeTitles="YES" id="hq3-L0-Ktt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="96"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
