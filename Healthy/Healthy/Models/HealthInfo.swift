@@ -15,7 +15,7 @@ enum BMIClassification: String {
     case obesityThirdDegree = "Ожирение 3 степени"
 }
 
-enum HealthParametersType {
+enum HealthParametersType: CaseIterable {
     case bodyMassIndex
     case calories
     case liquid

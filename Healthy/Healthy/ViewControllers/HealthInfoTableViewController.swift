@@ -11,11 +11,7 @@ class HealthInfoTableViewController: UITableViewController {
 
     //MARK: -Properties
     private var healthParameters: [HealthParametersType : Double] = [:]
-    private var healthParametersType: [HealthParametersType] = [
-        .bodyMassIndex,
-        .calories,
-        .liquid
-    ]
+    private var healthParametersType = HealthParametersType.allCases
     
     //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
